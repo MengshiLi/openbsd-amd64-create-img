@@ -68,13 +68,13 @@ echo 'set tty com0' > boot.conf
 EOF
 
 # installurl
-echo "prepare installurl..."
+echo "prepare etc/installurl..."
 cat >etc/installurl <<EOF
 https://${MIRROR}/pub/OpenBSD
 EOF
 
 # etc/rc.local
-echo "prepare rc.local..."
+echo "prepare etc/rc.local..."
 cat >etc/rc.local <<EOF
 (
   set -x
@@ -108,6 +108,8 @@ hw.smt=1
 kern.timecounter.hardware=tsc
 EOF
 
+# tar above files into siteXX.tgz
+echo "tar above four files into siteXX.tgz"
 chmod +x install.site
 tar -zcvf site${RELNO}.tgz install.site etc/{installurl,rc.local,sysctl.conf}
 
@@ -123,8 +125,8 @@ Do you expect to run the X Window System = no
 Change the default console to com0 = yes
 Which speed should com0 use = 115200
 Setup a user = mars
-Full name for user gopher = Mars Li
-Password for user gopher = mars
+Full name for user mars = Mars Li
+Password for user mars = mars
 Allow root ssh login = yes
 What timezone = US/Pacific
 Which disk = sd0
