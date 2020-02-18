@@ -23,6 +23,7 @@ fi
 readonly ISO="install${RELNO}-${ARCH}.iso"
 readonly ISO_PATCHED="install${RELNO}-${ARCH}-patched.iso"
 
+echo "Downloading OpenBSD ISO..."
 if [[ ! -f "${ISO}" ]]; then
   DIR="${VERSION}"
   if [[ "$SNAPSHOT" = true ]]; then
@@ -57,6 +58,7 @@ fi
 mkdir -p etc
 
 # install.site
+echo "prepare install.site..."
 cat >install.site <<EOF
 #!/bin/sh
 syspatch
@@ -66,11 +68,13 @@ echo 'set tty com0' > boot.conf
 EOF
 
 # installurl
+echo "prepare installurl..."
 cat >etc/installurl <<EOF
 https://${MIRROR}/pub/OpenBSD
 EOF
 
 # etc/rc.local
+echo "prepare rc.local..."
 cat >etc/rc.local <<EOF
 (
   set -x
@@ -98,6 +102,7 @@ cat >etc/rc.local <<EOF
 EOF
 
 # etc/sysctl.conf
+echo "prepare etc/sysctl.conf..."
 cat >etc/sysctl.conf <<EOF
 hw.smt=1
 kern.timecounter.hardware=tsc
@@ -107,6 +112,7 @@ chmod +x install.site
 tar -zcvf site${RELNO}.tgz install.site etc/{installurl,rc.local,sysctl.conf}
 
 # Autoinstall script.
+echo "prepare auto_install.conf..."
 cat >auto_install.conf <<EOF
 System hostname = buildlet
 Which network interface = vio0
@@ -130,12 +136,14 @@ Directory does not contain SHA256.sig. Continue without verification = yes
 EOF
 
 # Disklabel template.
+echo "prepare disklabel.template..."
 cat >disklabel.template <<EOF
 /	5G-*	95%
 swap	1G
 EOF
 
 # Hack install CD a bit.
+echo "hacking the install CD..."
 echo 'set tty com0' > boot.conf
 dd if=/dev/urandom of=random.seed bs=4096 count=1
 cp "${ISO}" "${ISO_PATCHED}"

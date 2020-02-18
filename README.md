@@ -4,7 +4,7 @@ make.bash creates a Google Compute Engine VM image to run the Go
 OpenBSD builder, booting up to run the buildlet.
 
 make.bash should be run on a Linux box with expect and qemu.
-Debian packages: expect qemu-utils qemu-system-x86.
+Debian packages: expect qemu-utils qemu-system-x86 growisofs.
 
 After it completes, it creates a file openbsd-amd64-gce.tar.gz
 
