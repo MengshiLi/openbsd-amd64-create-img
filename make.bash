@@ -8,7 +8,7 @@
 set -e
 set -u
 
-readonly VERSION="6.4"
+readonly VERSION="6.6"
 readonly RELNO="${VERSION/./}"
 readonly SNAPSHOT=false
 
@@ -55,6 +55,8 @@ if [[ "$SNAPSHOT" = true ]]; then
   PKG_ADD_OPTIONS="-D snap"
 fi
 mkdir -p etc
+
+# install.site
 cat >install.site <<EOF
 #!/bin/sh
 syspatch
@@ -63,9 +65,12 @@ pkg_add -iv ${PKG_ADD_OPTIONS} bash curl git
 echo 'set tty com0' > boot.conf
 EOF
 
+# installurl
 cat >etc/installurl <<EOF
 https://${MIRROR}/pub/OpenBSD
 EOF
+
+# etc/rc.local
 cat >etc/rc.local <<EOF
 (
   set -x
@@ -91,10 +96,13 @@ cat >etc/rc.local <<EOF
   )&
 )
 EOF
+
+# etc/sysctl.conf
 cat >etc/sysctl.conf <<EOF
 hw.smt=1
 kern.timecounter.hardware=tsc
 EOF
+
 chmod +x install.site
 tar -zcvf site${RELNO}.tgz install.site etc/{installurl,rc.local,sysctl.conf}
 
@@ -108,10 +116,10 @@ Password for root account = root
 Do you expect to run the X Window System = no
 Change the default console to com0 = yes
 Which speed should com0 use = 115200
-Setup a user = gopher
-Full name for user gopher = Gopher Gopherson
-Password for user gopher = gopher
-Allow root ssh login = no
+Setup a user = mars
+Full name for user gopher = Mars Li
+Password for user gopher = mars
+Allow root ssh login = yes
 What timezone = US/Pacific
 Which disk = sd0
 Use (W)hole disk or (E)dit the MBR = whole
